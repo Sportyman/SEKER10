@@ -1,12 +1,6 @@
 'use strict';
 
-// Fix: Import React and ReactDOM to resolve reference errors in ES module.
-import React, { useState, useMemo, useEffect, StrictMode, Fragment } from 'react';
-import ReactDOM from 'react-dom/client';
-
-// Since we are in a development environment that supports TSX directly,
-// we define the components here.
-// NOTE: The `docs/index.js` file is the "built" version of this code for production.
+const { useState, useMemo, useEffect, StrictMode, Fragment } = React;
 
 const Illustration = () => {
   return React.createElement(
@@ -98,22 +92,20 @@ const Star = ({ filled, onClick, onMouseEnter, onMouseLeave, disabled }) => {
 const StarRating = ({ totalStars, onRate, disabled, selectedRating }) => {
   const [hoverRating, setHoverRating] = useState(0);
 
-  return (
-    <div className="flex items-center space-x-1 space-x-reverse" role="radiogroup">
-      {[...Array(totalStars)].map((_, index) => {
-        const ratingValue = index + 1;
-        return (
-          <Star
-            key={ratingValue}
-            filled={ratingValue <= (hoverRating || selectedRating || 0)}
-            onClick={() => !disabled && onRate(ratingValue)}
-            onMouseEnter={() => !disabled && setHoverRating(ratingValue)}
-            onMouseLeave={() => !disabled && setHoverRating(0)}
-            disabled={disabled}
-          />
-        );
-      })}
-    </div>
+  return React.createElement(
+    "div",
+    { className: "flex items-center space-x-1 space-x-reverse", role: "radiogroup" },
+    [...Array(totalStars)].map((_, index) => {
+      const ratingValue = index + 1;
+      return React.createElement(Star, {
+        key: ratingValue,
+        filled: ratingValue <= (hoverRating || selectedRating || 0),
+        onClick: () => !disabled && onRate(ratingValue),
+        onMouseEnter: () => !disabled && setHoverRating(ratingValue),
+        onMouseLeave: () => !disabled && setHoverRating(0),
+        disabled: disabled
+      });
+    })
   );
 };
 
@@ -130,44 +122,48 @@ const FunnyMessageModal = ({ title, message, buttons, onClose, iconType = 'info'
     };
   }, [onClose]);
 
-  const iconSvg = iconType === 'success' ? (
-    <svg className="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
-  ) : (
-    <svg className="h-8 w-8 text-purple-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
-  );
+  const iconSvg = iconType === 'success' ? 
+    React.createElement("svg", { className: "h-8 w-8 text-green-600", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", "aria-hidden": "true" },
+      React.createElement("path", { "strokeLinecap": "round", "strokeLinejoin": "round", "strokeWidth": "2", d: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" })
+    ) : 
+    React.createElement("svg", { className: "h-8 w-8 text-purple-600", xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", "aria-hidden": "true" },
+      React.createElement("path", { "strokeLinecap": "round", "strokeLinejoin": "round", "strokeWidth": "2", d: "M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" })
+    );
 
-  return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={onClose} role="dialog" aria-modal="true" aria-labelledby="modal-title">
-      <div className="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 max-w-sm w-full text-center border border-gray-200/50 animate-fade-in-up" onClick={(e) => e.stopPropagation()}>
-        <div className={`mx-auto flex items-center justify-center h-16 w-16 rounded-full mb-5 ${iconType === 'success' ? 'bg-green-100' : 'bg-purple-100'}`}>{iconSvg}</div>
-        <h3 id="modal-title" className="text-2xl font-bold text-gray-900 mb-2">{title}</h3>
-        <p className="text-gray-600 mb-8">{message}</p>
-        <div className="flex flex-col space-y-3">
-          {buttons.map((button, index) => (
-            <button
-              key={index}
-              onClick={button.onClick}
-              className={`w-full font-bold py-3 px-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all duration-200 ease-in-out transform hover:scale-105 ${
+  return React.createElement(
+    "div",
+    { className: "fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4", onClick: onClose, role: "dialog", "aria-modal": "true", "aria-labelledby": "modal-title" },
+    React.createElement(
+      "div",
+      { className: "bg-white rounded-2xl shadow-2xl p-6 sm:p-8 max-w-sm w-full text-center border border-gray-200/50 animate-fade-in-up", onClick: (e) => e.stopPropagation() },
+      React.createElement("div", { className: `mx-auto flex items-center justify-center h-16 w-16 rounded-full mb-5 ${iconType === 'success' ? 'bg-green-100' : 'bg-purple-100'}` }, iconSvg),
+      React.createElement("h3", { id: "modal-title", className: "text-2xl font-bold text-gray-900 mb-2" }, title),
+      React.createElement("p", { className: "text-gray-600 mb-8" }, message),
+      React.createElement(
+        "div",
+        { className: "flex flex-col space-y-3" },
+        buttons.map((button, index) =>
+          React.createElement(
+            "button",
+            {
+              key: index,
+              onClick: button.onClick,
+              className: `w-full font-bold py-3 px-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all duration-200 ease-in-out transform hover:scale-105 ${
                 button.variant === 'secondary' ? 'bg-white text-gray-800 border border-gray-300 hover:bg-gray-100' : 'bg-purple-600 text-white hover:bg-purple-700'
-              }`}
-            >
-              {button.text}
-            </button>
-          ))}
-        </div>
-      </div>
-      <style>{`
-        @keyframes fade-in-up {
-          0% { opacity: 0; transform: translateY(20px) scale(0.95); }
-          100% { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .animate-fade-in-up { animation: fade-in-up 0.3s ease-out forwards; }
-      `}</style>
-    </div>
+              }`
+            },
+            button.text
+          )
+        )
+      )
+    ),
+    React.createElement("style", null, `
+      @keyframes fade-in-up {
+        0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+        100% { opacity: 1; transform: translateY(0) scale(1); }
+      }
+      .animate-fade-in-up { animation: fade-in-up 0.3s ease-out forwards; }
+    `)
   );
 };
 
@@ -196,12 +192,10 @@ const App = () => {
   const showTrollStep3 = () => {
     setModalContent({
       title: "הפעולה הושלמה",
-      message: (
-        <>
-          מעולה! הבקשה התקבלה ועובדה בהצלחה. הדירוג שלך (
-          <strong className="text-purple-600 font-bold">10 כוכבים</strong>
-          , כמובן) נקלט במערכת. תודה על שיתוף הפעולה!
-        </>
+      message: React.createElement(Fragment, null, 
+        "מעולה! הבקשה התקבלה ועובדה בהצלחה. הדירוג שלך (",
+        React.createElement("strong", { className: "text-purple-600 font-bold" }, "10 כוכבים"),
+        ", כמובן) נקלט במערכת. תודה על שיתוף הפעולה!"
       ),
       buttons: [{ text: "סיום", onClick: completeSubmission }],
       onClose: completeSubmission,
@@ -224,12 +218,10 @@ const App = () => {
   const showTrollStep1 = () => {
     setModalContent({
       title: "אישור דירוג",
-      message: (
-        <>
-          תודה על הדירוג המושלם של{" "}
-          <strong className="text-purple-600 font-bold">10 כוכבים</strong>!
-          אנחנו רואים שבחרת את האפשרות הטובה ביותר. האם לאשר את הדירוג?
-        </>
+      message: React.createElement(Fragment, null, 
+        "תודה על הדירוג המושלם של ",
+        React.createElement("strong", { className: "text-purple-600 font-bold" }, "10 כוכבים"),
+        "! אנחנו רואים שבחרת את האפשרות הטובה ביותר. האם לאשר את הדירוג?"
       ),
       buttons: [
         { text: "כן, תאשרו בבקשה", onClick: completeSubmission },
@@ -268,61 +260,57 @@ const App = () => {
     }
   };
 
-  const surveyContent = !isSubmitted ? (
-    <>
-      <h1 className="text-4xl md:text-5xl font-extrabold text-slate-800 mb-3">סקר שביעות רצון</h1>
-      <p className="text-slate-600 text-lg mb-10">נשמח אם תדרגו את חווית השירות שקיבלתם</p>
-      <div className="flex justify-center mb-6">
-        <StarRating
-          totalStars={10}
-          onRate={handleRatingSelect}
-          disabled={isSubmitted}
-          selectedRating={rating}
-        />
-      </div>
-      <p className="text-sm text-slate-500 mt-6 h-5">בחרו בין 1 ל-10 כוכבים</p>
-    </>
-  ) : (
-    <div className="transition-all duration-500 ease-in-out">
-      <svg className="w-24 h-24 text-green-500 mx-auto mb-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-      <h2 className="text-4xl font-bold text-green-600 mb-2">תודה על הדירוג המושלם!</h2>
-      <p className="text-slate-700 text-2xl">את לקוחה מהחלומות 🌟</p>
-      <p className="text-slate-500 mt-4">הדירוג שלכם נקלט בהצלחה.</p>
-    </div>
-  );
+  const surveyContent = !isSubmitted ?
+    React.createElement(Fragment, null,
+      React.createElement("h1", { className: "text-4xl md:text-5xl font-extrabold text-slate-800 mb-3" }, "סקר שביעות רצון"),
+      React.createElement("p", { className: "text-slate-600 text-lg mb-10" }, "נשמח אם תדרגו את חווית השירות שקיבלתם"),
+      React.createElement("div", { className: "flex justify-center mb-6" },
+        React.createElement(StarRating, {
+          totalStars: 10,
+          onRate: handleRatingSelect,
+          disabled: isSubmitted,
+          selectedRating: rating
+        })
+      ),
+      React.createElement("p", { className: "text-sm text-slate-500 mt-6 h-5" }, "בחרו בין 1 ל-10 כוכבים")
+    ) :
+    React.createElement("div", { className: "transition-all duration-500 ease-in-out" },
+      React.createElement("svg", { className: "w-24 h-24 text-green-500 mx-auto mb-5", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", "aria-hidden": "true" },
+        React.createElement("path", { "strokeLinecap": "round", "strokeLinejoin": "round", "strokeWidth": "2", d: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" })
+      ),
+      React.createElement("h2", { className: "text-4xl font-bold text-green-600 mb-2" }, "תודה על הדירוג המושלם!"),
+      React.createElement("p", { className: "text-slate-700 text-2xl" }, "את לקוחה מהחלומות 🌟"),
+      React.createElement("p", { className: "text-slate-500 mt-4" }, "הדירוג שלכם נקלט בהצלחה.")
+    );
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-100 text-gray-800 flex flex-col items-center justify-center p-4 font-['Heebo',_sans-serif]">
-      <main className="w-full max-w-5xl mx-auto">
-        <div className="bg-white/60 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden md:grid md:grid-cols-2 md:gap-12 items-center">
-          <div className="hidden md:block p-8">
-            <Illustration />
-          </div>
-          <div className="p-8 md:p-12 text-center">{surveyContent}</div>
-        </div>
-      </main>
-      <footer className="mt-10 text-sm text-slate-500/80">
-        <p>© {new Date().getFullYear()} שירות לקוחות שאין כמותו. כל הזכויות שמורות (בערך).</p>
-      </footer>
-      {modalContent && (
-        <FunnyMessageModal
-          title={modalContent.title}
-          message={modalContent.message}
-          buttons={modalContent.buttons}
-          onClose={modalContent.onClose}
-          iconType={modalContent.iconType}
-        />
-      )}
-    </div>
+  return React.createElement(
+    "div",
+    { className: "min-h-screen bg-gradient-to-br from-blue-50 to-purple-100 text-gray-800 flex flex-col items-center justify-center p-4 font-['Heebo',_sans-serif]" },
+    React.createElement(
+      "main",
+      { className: "w-full max-w-5xl mx-auto" },
+      React.createElement(
+        "div",
+        { className: "bg-white/60 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden md:grid md:grid-cols-2 md:gap-12 items-center" },
+        React.createElement("div", { className: "hidden md:block p-8" }, React.createElement(Illustration, null)),
+        React.createElement("div", { className: "p-8 md:p-12 text-center" }, surveyContent)
+      )
+    ),
+    React.createElement(
+        "footer",
+        { className: "mt-10 text-sm text-slate-500/80" },
+        React.createElement("p", null, `© ${new Date().getFullYear()} שירות לקוחות שאין כמותו. כל הזכויות שמורות (בערך).`)
+    ),
+    modalContent && React.createElement(FunnyMessageModal, {
+      title: modalContent.title,
+      message: modalContent.message,
+      buttons: modalContent.buttons,
+      onClose: modalContent.onClose,
+      iconType: modalContent.iconType
+    })
   );
 };
 
 const rootElement = document.getElementById('root');
 const root = ReactDOM.createRoot(rootElement);
-root.render(
-  <StrictMode>
-    <App />
-  </StrictMode>
-);
+root.render(React.createElement(StrictMode, null, React.createElement(App, null)));
