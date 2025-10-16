@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
-import StarRating from './components/StarRating';
-import FunnyMessageModal from './components/FunnyMessageModal';
-import Illustration from './components/Illustration';
+import StarRating from './components/StarRating.tsx';
+import FunnyMessageModal from './components/FunnyMessageModal.tsx';
+import Illustration from './components/Illustration.tsx';
 
 // Define the interface for modal content to ensure type safety
 interface ModalContent {
