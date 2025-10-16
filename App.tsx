@@ -22,16 +22,12 @@ const App: React.FC = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const funnyMessages = useMemo(() => {
-    const today = new Date().toLocaleDateString('he-IL', { weekday: 'long' });
-    const otherDays = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'].filter(d => d !== today);
-    const randomDay = otherDays[Math.floor(Math.random() * otherDays.length)];
-    
     return {
-      2: "דירוג 2 כוכבים נמצא כרגע בחופשה שנתית. נסו דירוג יותר... זמין.",
-      3: `אופס! דירוג 3 כוכבים זמין רק בימי ${randomDay}. היום יום ${today}. איזה באסה.`,
-      4: "שגיאה 404: דירוג לא נמצא. ניסינו הכל, אבל נראה שדירוג 4 פשוט לא קיים ביקום שלנו.",
-      5: "דירוג 5 כוכבים הוא כמו חצי כוס מלאה, ואנחנו אנשים של כוס מלאה. בואו נמלא אותה!",
-      6: "כל הכבוד על המאמץ, אבל המערכת שלנו מקבלת רק דירוגים שעברו את מבחן ה-IQ של 10.",
+      2: "דירוגים מתחת ל־10 לא נתמכים כרגע עקב תקלה טכנית.",
+      3: "אופציה זו פתוחה רק בימי שלישי בין 04:00–04:05 לפנות בוקר.",
+      4: "נראה שהאצבע שלך החליקה. תיקנו לך ל־10. תודה על ההצבעה!",
+      5: "בואי נסכם את הדירוג הזה, ונקבע שהוא 10. תודה רבה על ההצבעה, שמחנו לתת שירות.",
+      6: "חמוד… אבל לא מספיק נוצץ! שודרגת ל־10 😉",
       7: "7 זה מספר מזל, אבל לא אצלנו. נסו את מספר המזל שלנו: 10.",
       8: "כמעט שם! זה כמו להגיע לפסגה ולגלות ששכחת את המצלמה. בואו נעלה שוב, עד 10.",
       9: "כל כך קרוב, אבל כל כך רחוק. חסר לך רק כוכב אחד כדי לפתוח את שלב הבונוס!",
@@ -98,12 +94,22 @@ const App: React.FC = () => {
   
   const handleRatingSelect = (selectedRating: number) => {
     if (isSubmitted) return;
+    const autoSubmitRatings = [4, 5, 6];
 
     if (selectedRating === 10) {
       setRating(10);
       setIsSubmitted(true);
     } else if (selectedRating === 1) {
       showTrollStep1();
+    } else if (autoSubmitRatings.includes(selectedRating)) {
+      const message = funnyMessages[selectedRating as keyof typeof funnyMessages];
+      setModalContent({
+        title: "עדכון מערכת אוטומטי",
+        message: message,
+        buttons: [{ text: "הבנתי!", onClick: completeSubmission }],
+        onClose: completeSubmission,
+        iconType: 'success',
+      });
     } else {
       const message = funnyMessages[selectedRating as keyof typeof funnyMessages] || "הדירוג הזה לא עובד. נסו אחד אחר.";
       setModalContent({
@@ -155,8 +161,8 @@ const App: React.FC = () => {
                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                   ></path>
                 </svg>
-                <h2 className="text-4xl font-bold text-green-600 mb-2">תודה רבה!</h2>
-                <p className="text-slate-700 text-2xl">ידענו שאתם לקוחות 10!</p>
+                <h2 className="text-4xl font-bold text-green-600 mb-2">תודה על הדירוג המושלם!</h2>
+                <p className="text-slate-700 text-2xl">את לקוחה מהחלומות 🌟</p>
                 <p className="text-slate-500 mt-4">הדירוג שלכם נקלט בהצלחה.</p>
               </div>
             )}
